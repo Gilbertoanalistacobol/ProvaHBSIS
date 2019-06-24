@@ -37,7 +37,7 @@
        77   WS-ALTVEN           PIC X(01) VALUE SPACES.
        77   WS-EXCVEN           PIC X(01) VALUE SPACES.
        77   WS-CONVEN           PIC X(01) VALUE SPACES.
-
+       77   WS-CONF             PIC X(01) VALUE SPACES.
        
        
        LINKAGE SECTION.
@@ -285,7 +285,7 @@
         0700-EXIT.
               EXIT.
 
-        0701-EXC-CODVEN.
+        0701-CON-CODVEN.
  
             ACCEPT (07 34) VEN-COD WITH PROMPT.
             
@@ -319,5 +319,4 @@
                
                
                
-             
-             
+            
