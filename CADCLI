@@ -11,7 +11,7 @@
              ORGANIZATION          IS INDEXEC 
              ACCESS MODE           IS DYNAMIC
              RECORD KEY            IS CHAVE01 = CLI-COD
-             ALTERNATE KEY         IS CHAVE02 = CLI-CPF WITH NO DUPLICATES
+             ALTERNATE KEY         IS CHAVE02 = CLI-CNPJ WITH NO DUPLICATES
              ALTERNATE KEY         IS CHAVE03 = CLI-NOME WITH NO DUPLICATES
              LOCK MODE             IS MANUAL
              FILE STATUS           IS ws-resultado-acesso.
