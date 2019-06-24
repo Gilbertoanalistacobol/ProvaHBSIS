@@ -226,13 +226,13 @@
           
            MOVE SPACES TO WS-EXCVEN.
  
-           PERFORM 0601-EXC-CODVEN THRU 06501-EXIT
+           PERFORM 0601-EXC-CODVEN THRU 0601-EXIT
              UNTIL WS-EXCVEN = "OK".
 
-        0500-EXIT.
+        0600-EXIT.
               EXIT.
 
-        0501-EXC-CODVEN.
+        0601-EXC-CODVEN.
  
             ACCEPT (07 34) VEN-COD WITH PROMPT.
             
@@ -252,7 +252,7 @@
             EXIT.
 
 
-         0602-COMPLETA-INCVEN.
+         0602-COMPLETA-ALTVEN.
 
              DISPLAY (08 34) VEN-NOME.
              DISPLAY (08 34) VEN-LAT.
@@ -268,4 +268,50 @@
                EXIT.
                
                
+       0700-EXC-VENDEDOR.
+          
+          
+           MOVE SPACES TO WS-CONVEN.
+ 
+           PERFORM 0701-CON-CODVEN THRU 0701-EXIT
+             UNTIL WS-CONVEN = "OK".
+
+        0700-EXIT.
+              EXIT.
+
+        0701-EXC-CODVEN.
+ 
+            ACCEPT (07 34) VEN-COD WITH PROMPT.
+            
+            IF  VEN-COD = ZEROS
+                DISPLAY (24 10) "CODIGO DO VENDEDOR NAO INFORMADO"
+                MOVE SPACES TO WS-EXCVEN
+                EXIT.
+
+
+            READ CADVEN INVALID KEY
+               DISPLAY (24 10) "VENDEDOR INEXISTENTE"
+               STOP RUN.
+               
+               PERFORM 0702-COMPLETA-CONVEN THRU 0702-EXIT.
+
+         0701-EXIT.
+            EXIT.
+
+
+         0702-COMPLETA-CONVEN.
+
+             DISPLAY (08 34) VEN-NOME.
+             DISPLAY (08 34) VEN-LAT.
+             DISPLAY (08 34) VEN-LON.
+             DISPLAY (24 10) 'CONSULTA OK".
+             
+             ACCEPT (24 12) WS-CONF. 
+          
+         0702-EXIT.
+               EXIT.
+               
+               
+               
+             
              
