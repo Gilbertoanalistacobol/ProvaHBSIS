@@ -70,8 +70,22 @@
 
            PERFORM 0200-ACEITAR-OPCAO-CL THRU 0200-EXIT
                  UNTIL WS-OPCAO-OK = "S".
+
+           IF  WS-OPCAO = 1
+               PERFORM 0400-INC-VENDEDOR THRU 0400-EXIT.            
+
+           IF  WS-OPCAO = 2
+               PERFORM 0500-ALT-VENDEDOR THRU 0500-EXIT.            
            
-           
+           IF  WS-OPCAO = 3
+               PERFORM 0600-EXC-VENDEDOR THRU 0600-EXIT.            
+          
+           IF  WS-OPCAO = 4
+               PERFORM 0700-CON-VENDEDOR THRU 0700-EXIT.            
+   
+               STOP RUN.
+               
+               
        0200-ACEITAR-OPCAO-CL.
 
             ACCEPT (17 55)WS-OPCAO WITH PROMPT.
@@ -87,28 +101,28 @@
             EXIT.
 
 
-        0400-INC-VENDEDOR.
+        0400-INC-CLIENTE.
 
-        MOVE SPACES TO WS-INCVEN.
+        MOVE SPACES TO WS-INCCLI.
  
-        PERFORM 0401-INC-CODVEN THRU 0401-EXIT
-            UNTIL WS-INCVEN = "OK".
+        PERFORM 0401-INC-CODCLI THRU 0401-EXIT
+            UNTIL WS-INCCLI = "OK".
 
         0400-EXIT.
              EXIT.
 
-        0401-INC-CODVEN.
+        0401-INC-CODCLI.
  
-            ACCEPT (07 34) VEN-COD WITH PROMPT.
+            ACCEPT (07 34) CLI-COD WITH PROMPT.
             
-            IF  VEN-COD = ZEROS
-                DISPLAY (24 10) "CODIGO DO VENDEDOR NAO INFORMADO"
-                MOVE SPACES TO WS-INCVEN
+            IF  CLI-COD = ZEROS
+                DISPLAY (24 10) "CODIGO DO CLIENTE NAO INFORMADO"
+                MOVE SPACES TO WS-INCCLI
                 EXIT.
 
 
-            READ CADVEN INVALID KEY
-                 PERFORM 0402-COMPLETA-INCVEN THRU 0402-EXIT.
+            READ ARQ-CLIENTE INVALID KEY
+                 PERFORM 0402-COMPLETA-INCCLI THRU 0402-EXIT.
 
          0401-EXIT.
             EXIT.
