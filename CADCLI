@@ -92,8 +92,8 @@
            IF  WS-OPCAO = 4
                PERFORM 0700-CON-VENDEDOR THRU 0700-EXIT.            
    
-               STOP RUN.
-               
+           MOVE "MENU" TO PAR-PRG
+           CALL "MENUI" USING PARAM-PROG.
                
        0200-ACEITAR-OPCAO-CL.
 
