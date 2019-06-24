@@ -39,6 +39,9 @@
        77   WS-CONF              PIC X(01) VALUE SPACES.
        
        
+       01   PARAM-PROG.
+           05  PAR-PRG     PIC X(10).       
+       
        LINKAGE SECTION.
 
        01   USING-PROG.
