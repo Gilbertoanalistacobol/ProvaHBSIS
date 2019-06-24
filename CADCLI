@@ -51,6 +51,15 @@
             05 LINE 24 COLUMN 01 VALUE "MENSAGEM:".
 
 
+       01   TELAINC.
+            05 BLANK SCREEN.
+            05 LINE 10 COLUMN 10 VALUE "CODIGO CLIENTE ...: ".
+            05 LINE 11 COLUMN 10 VALUE "CNPJ .............: ".
+            05 LINE 12 COLUMN 10 VALUE "RAZAO SOCIAL .....: ".
+            05 LINE 13 COLUMN 10 VALUE "LATITUDE .........: ".
+            05 LINE 14 COLUMN 10 VALUE "LONGITUTE ........: ".
+            
+            
        PROCEDURE DIVISION USING USING-PROG.
        0000-INICIO.
  
@@ -62,11 +71,61 @@
                  UNTIL WS-OPCAO-OK = "S".
            
            IF  WS-OPCAO = 01           
+               ACCEPT (10 30) CLI-COD
+               PERFORM INC-CLI THRU FIM-INC-CLI
+               STOP RUN.
+           
+           IF  WS-OPCAO = 02           
+               ACCEPT (10 30) CLI-COD
+               PERFORM ALT-CLI THRU FIM-ALT-CLI
+               STOP RUN.
+               
+           IF  WS-OPCAO = 03           
+               ACCEPT (10 30) CLI-COD
+               PERFORM EXC-CLI THRU FIM-EXC-CLI
+               STOP RUN.
+               
+       INC-CLI.
+        
+           READ ARQ-CLIENTE INVALID KEY
+           ACCEPT (11 30) CLI-CNPJ 
+           ACCEPT (12 30) CLI-RAZAO
+           ACCEPT (13 30) CLI-LAT
+           ACCEPT (14 30) CLI-LON
+           DISPLAY (24 10) "CLIENTE INCLUIDO".
+           
+           WRITE REG-CLIENTE.
+
+      FIM-INC-CLI.
+           EXIT.
+           
+       ALT-CLI.
+        
+           READ ARQ-CLIENTE INVALID KEY
+                DISPLAY (24 10) "CLIENTE INEXISTENTE"
+                STOP RUN.
                 
+           ACCEPT (11 30) CLI-CNPJ   WITH UPDATE. 
+           ACCEPT (12 30) CLI-RAZAO  WITH UPDATE.
+           ACCEPT (13 30) CLI-LAT    WITH UPDATE.
+           ACCEPT (14 30) CLI-LON    WITH UPDATE.
            
+           REWRITE REG-CLIENTE.
+
+       FIM-ALT-CLI.
+           EXIT.
            
-
-
+       EXC-CLI.
+        
+           READ ARQ-CLIENTE INVALID KEY
+                DISPLAY (24 10) "CLIENTE INEXISTENTE"
+                STOP RUN.
+                
+           DELETE REG-CLI.
+                      
+       FIM-ALT-CLI.
+           EXIT.
+           
        0200-ACEITAR-OPCAO-CL.
 
             ACCEPT (17 55)WS-OPCAO WITH PROMPT.
