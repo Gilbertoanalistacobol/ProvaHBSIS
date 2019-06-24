@@ -1,0 +1,159 @@
+        IDENTIFICATION DIVISION.
+        PROGRAM-ID.CADVEN.
+        ENVIRONMENT DIVISION.
+        CONFIGURATION SECTION.
+        SPECIAL-NAMES.
+              DECIMAL-POINT IS COMMA.
+        INPUT-OUTPUT SECTION.
+        FILE-CONTROL.
+        
+        SELECT ARQ-VENDEDOR ASSIGN TO DISK DISK-VENDEDOR
+             ORGANIZATION          IS INDEXEC 
+             ACCESS MODE           IS DYNAMIC
+             RECORD KEY            IS CHAVE01 = VEN-COD
+             ALTERNATE KEY         IS CHAVE02 = VEN-CPF WITH NO DUPLICATES
+             ALTERNATE KEY         IS CHAVE03 = VEN-NOME WITH NO DUPLICATES
+             LOCK MODE             IS MANUAL
+             FILE STATUS           IS WS-FILEST.
+ 
+  
+        DATA DIVISION.
+
+        FD   ARQ-VENDEDOR.
+        01   REG-VENDEDOR.
+             05 VEN-COD                PIC  9(007).
+             05 VEN-CPF                PIC  9(011).
+             05 VEN-NOME               PIC  X(040).
+             05 VEN-LAT                PIC S9(003)V9(008).
+             05 VEN-LON                PIC S9(003)V9(008).
+
+
+       WORKING-STORAGE SECTION.
+       77   WS-FILEST       PIC X(02) VALUE SPACES. 
+       77   WS-OPCAO        PIC 9(02) VALUE ZEROS. 
+       77   WS-OPCAO-OK     PIC X(02) VALUE SPACES.
+       77   WS-CHE-CPF      PIC X(02) VALUE SPACES.  
+
+       LINKAGE SECTION.
+
+       01   USING-PROG.
+            05  USI-PRG     PIC X(10).
+
+       SCREEN SECTION.
+
+       01   TELA0102.
+            05 BLANK SCREEN.
+            05 LINE 01 COLUMN 70 VALUE "TELA01.02".
+            05 LINE 05 COLUMN 10 VALUE "CADASTRO DE VENDEDORES".
+            05 LINE 07 COLUMN 10 VALUE "INCLUSAO ...................................(01)".
+            05 LINE 08 COLUMN 10 VALUE "ALTERACAO ..................................(02)".
+            05 LINE 09 COLUMN 10 VALUE "EXCLUSAO ...................................(03)".
+            05 LINE 11 COLUMN 10 VALUE "IMPORTACAO .................................(04)".
+            05 LINE 17 COLUMN 10 VALUE "OPCAO:......................................(  )".
+            05 LINE 24 COLUMN 01 VALUE "MENSAGEM:".
+
+       01   TELA0102INC.
+            05 BLANK SCREEN.
+            05 LINE 01 COLUMN 70 VALUE "TELA01.021".
+            05 LINE 05 COLUMN 10 VALUE "INCLUSAO DE VENDEDORES".
+            05 LINE 07 COLUMN 10 VALUE "CODIGO DO VENDEDOR.....: ".
+            05 LINE 08 COLUMN 10 VALUE "CPF DO VENDEDOR........: ".
+            05 LINE 09 COLUMN 10 VALUE "NOME...................: ".
+            05 LINE 10 COLUMN 10 VALUE "LATITUDE...............: ".
+            05 LINE 11 COLUMN 10 VALUE "LONGITUDE..............: ".
+            05 LINE 24 COLUMN 01 VALUE "MENSAGEM:".
+ 
+ 
+
+       PROCEDURE DIVISION USING USING-PROG.
+       0000-INICIO.
+ 
+           DISPLAY TELA0102.
+
+           MOVE SPACES TO WS-OPCAO-OK.
+
+           PERFORM 0300-ACEITAR-OPCAO-VE THRU 0300-EXIT
+                 UNTIL WS-OPCAO-OK = "S".
+
+           IF  WS-OPCAO = 1
+               PERFORM 0400-INC-VENDEDOR THRU 0400-EXIT.  
+ 
+           .
+           .
+           .
+           .
+           .
+
+
+       0300-ACEITAR-OPCAO-CL.
+
+            DISPLAY TELA0102INC. 
+
+            ACCEPT (17 55)WS-OPCAO WITH PROMPT.
+
+            IF WS-OPCAO NOT = 01 AND NOT = 02 AND NOT = 03 AND NOT = 04
+               DISPLAY (24 10) "OPCAO INVALIDA
+               MOVE SPACES TO WS-OPCAO-OK
+               EXIT.
+
+            MOVE "S" TO WS-OPCAO-OK.
+          
+        0300-EXIT.
+            EXIT.
+
+
+        0400-INC-VENDEDOR.
+
+        MOVE SPACES TO WS-INCVEN.
+ 
+        PERFORM 0401-INC-CODVEN THRU 0401-EXIT
+            UNTIL WS-INCVEN = "OK".
+
+
+
+        0401-INC-CODVEN.
+ 
+            ACCEPT (07 34) VEN-COD WITH PROMPT.
+            
+            IF  VEN-COD = ZEROS
+                DISPLAY (24 10) "CODIGO DO VENDEDOR NAO INFORMADO"
+                MOVE SPACES TO WS-INCVEN
+                EXIT.
+
+
+            READ CADVEN INVALID KEY
+                 PERFORM 0402-COMPLETA-INCVEN THRU 0402-EXIT.
+
+         0401-EXIT.
+            EXIT.
+
+
+         0402-COMPLETA-INCVEN.
+
+             ACCEPT (08 34) VEN-CPF WITH PROMPT.
+
+             PERFORM 0403-CHE-CPF THRU 0403-EXIT.
+
+             IF  WS-CHE-CPF NOT = "OK"
+                 MOVE SPACES TO WS-INCVEN.
+
+             ACCEPT (08 34) VEN-NOME WITH PROMPT.
+             ACCEPT (08 34) VEN-LAT  WITH PROMPT.
+             ACCEPT (08 34) VEN-LON  WITH PROMPT.
+
+             
+         0402-EXIT.
+             EXIT.
+
+         0403-CHE-CPF.
+
+        *     CHECAR DIGITO VERIFICADOR MODULO 11.
+
+              IF ROTINA = "OK"
+                 MOVE "OK" TO WS-CHE-CPF
+              ELSE
+                 MOVE SPACES TO WS-CHE-CPF.
+
+          0403-EXIT.
+              EXIT.
+
