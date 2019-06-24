@@ -1,0 +1,80 @@
+        IDENTIFICATION DIVISION.
+        PROGRAM-ID.MENU.
+        ENVIRONMENT DIVISION.
+        CONFIGURATION SECTION.
+        SPECIAL-NAMES.
+              DECIMAL-POINT IS COMMA.
+       
+       
+        WORKING-STORAGE SECTION.
+        77   WS-OPCAO        PIC 9(02) VALUE ZEROS. 
+        77   WS-OPCAO-OK     PIC X(01) VALUE SPACES.
+
+        01   PARAM-PROG.
+            05  PAR-PRG     PIC X(10).
+
+        SCREEN SECTION.
+
+        01   TELA0100.
+            05 BLANK SCREEN.
+            05 LINE 01 COLUMN 70 VALUE "TELA01.00".
+            05 LINE 05 COLUMN 10 VALUE "MENU PRINCIPAL".
+            05 LINE 07 COLUMN 10 VALUE "01.00 - Cadastros...........................(00)".
+            05 LINE 08 COLUMN 10 VALUE "01.01 - Cadastro de Cliente.................(11)".
+            05 LINE 09 COLUMN 10 VALUE "01.02 - Cadastro de Vendedor................(12)".
+            05 LINE 11 COLUMN 10 VALUE "02.00 - Relatorios..........................(20)".
+            05 LINE 12 COLUMN 10 VALUE "02.01 - Relatorio de Clientes...............(21)".
+            05 LINE 13 COLUMN 10 VALUE "02.02 - Relatorio de Vendedores.............(22)".
+            05 LINE 15 COLUMN 10 VALUE "03.00 - Executar............................(30)".
+            05 LINE 16 COLUMN 10 VALUE "03.01 - Executar Distribuicao de Clientes...(31)".
+            05 LINE 17 COLUMN 10 VALUE "OPCAO:......................................(  )".
+            05 LINE 24 COLUMN 01 VALUE "MENSAGEM:".
+            
+            
+        PROCEDURE DIVISION.
+        0000-INICIO.
+ 
+            DISPLAY TELA0100.
+
+            MOVE SPACES TO WS-OPCAO-OK.
+
+            PERFORM 0100-ACEITAR-OPCAO THRU 0100-EXIT
+                 UNTIL WS-OPCAO-OK = "S".
+            .
+            .
+            .
+
+
+        0100-ACEITAR-OPCAO.
+
+             ACCEPT (17 55)WS-OPCAO WITH PROMPT.
+
+             IF WS-OPCAO NOT = 00 AND NOT = 11 AND NOT = 12 AND NOT = 20 AND NOT = 21
+                    AND NOT = 22 AND NOT = 30 AND NOT = 31
+                DISPLAY (24 10) "OPCAO INVALIDA
+                MOVE SPACES TO WS-OPCAO-OK
+                EXIT.
+
+             MOVE "S" TO WS-OPCAO-OK.
+          
+             IF  WS-OPCAO = 11
+                 MOVE "CADCLI" TO PAR-PRG
+                 CALL "CADCLI" USING PARAM-PROG.
+
+             IF  WS-OPCAO = 12
+                 MOVE "CADVEN" TO PAR-PRG
+                 CALL "CADVEN" USING PARAM-PROG.
+
+             IF  WS-OPCAO = 21
+                 MOVE "RELCLI" TO PAR-PRG
+                 CALL "RELCLI" USING PARAM-PROG.
+
+             IF  WS-OPCAO = 22
+                 MOVE "RELVEN" TO PAR-PRG
+                 CALL "RELVEN" USING PARAM-PROG.
+
+             STOP RUN.
+   
+         0100-EXIT.
+             EXIT.
+
