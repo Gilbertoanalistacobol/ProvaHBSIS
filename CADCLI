@@ -93,7 +93,7 @@
                PERFORM 0700-CON-VENDEDOR THRU 0700-EXIT.            
    
            MOVE "MENU" TO PAR-PRG
-           CALL "MENUI" USING PARAM-PROG.
+           CALL "MENU" USING PARAM-PROG.
                
        0200-ACEITAR-OPCAO-CL.
 
