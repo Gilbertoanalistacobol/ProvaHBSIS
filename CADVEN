@@ -37,7 +37,7 @@
        77   WS-ALTVEN           PIC X(01) VALUE SPACES.
        77   WS-EXCVEN           PIC X(01) VALUE SPACES.
        77   WS-CONVEN           PIC X(01) VALUE SPACES.
-       77   WS-CHE-CPF          PIC X(010 VALUE SPACES.
+
        
        
        LINKAGE SECTION.
