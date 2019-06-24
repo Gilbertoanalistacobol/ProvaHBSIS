@@ -95,7 +95,11 @@
           
            IF  WS-OPCAO = 4
                PERFORM 0700-CON-VENDEDOR THRU 0700-EXIT.            
-          
+
+           MOVE "MENU" TO PAR-PRG
+           CALL "MENU" USING PARAM-PROG.
+
+
        0300-ACEITAR-OPCAO-CL.
 
             DISPLAY TELA0102INC. 
