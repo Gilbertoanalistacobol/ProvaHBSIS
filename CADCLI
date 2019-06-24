@@ -36,6 +36,8 @@
        77   WS-EXCCLI            PIC X(01) VALUE SPACES.
        77   WS-CONCLI            PIC X(01) VALUE SPACES.
        77   WS-CHE-CNPJ          PIC X(02) VALUE SPACES.
+       77   WS-CONF              PIC X(01) VALUE SPACES.
+       
        
        LINKAGE SECTION.
 
@@ -272,39 +274,39 @@
        0700-CON-CLIENTE.
           
           
-           MOVE SPACES TO WS-CONVEN.
+           MOVE SPACES TO WS-CONCLI.
  
-           PERFORM 0701-CON-CODVEN THRU 0701-EXIT
-             UNTIL WS-CONVEN = "OK".
+           PERFORM 0701-CON-CODCLI THRU 0701-EXIT
+             UNTIL WS-CONCLI = "OK".
 
         0700-EXIT.
               EXIT.
 
-        0701-EXC-CODVEN.
+        0701-CON-CODCLI.
  
-            ACCEPT (07 34) VEN-COD WITH PROMPT.
+            ACCEPT (07 34) CLI-COD WITH PROMPT.
             
-            IF  VEN-COD = ZEROS
-                DISPLAY (24 10) "CODIGO DO VENDEDOR NAO INFORMADO"
-                MOVE SPACES TO WS-EXCVEN
+            IF  CLI-COD = ZEROS
+                DISPLAY (24 10) "CODIGO DO CLIENTE NAO INFORMADO"
+                MOVE SPACES TO WS-EXCCLI
                 EXIT.
 
 
             READ ARQ-CLENTE INVALID KEY
-               DISPLAY (24 10) "VENDEDOR INEXISTENTE"
+               DISPLAY (24 10) "CLIENTE INEXISTENTE"
                STOP RUN.
                
-               PERFORM 0702-COMPLETA-CONVEN THRU 0702-EXIT.
+               PERFORM 0702-COMPLETA-CONCLI THRU 0702-EXIT.
 
          0701-EXIT.
             EXIT.
 
 
-         0702-COMPLETA-CONVEN.
+         0702-COMPLETA-CONCLI.
 
-             DISPLAY (08 34) VEN-NOME.
-             DISPLAY (08 34) VEN-LAT.
-             DISPLAY (08 34) VEN-LON.
+             DISPLAY (08 34) CLI-NOME.
+             DISPLAY (08 34) CLI-LAT.
+             DISPLAY (08 34) CLI-LON.
              DISPLAY (24 10) 'CONSULTA OK".
              
              ACCEPT (24 12) WS-CONF. 
