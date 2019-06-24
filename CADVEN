@@ -124,7 +124,7 @@
                 EXIT.
 
 
-            READ CADVEN INVALID KEY
+            READ ARQ-VENDEDOR INVALID KEY
                  PERFORM 0402-COMPLETA-INCVEN THRU 0402-EXIT.
 
          0401-EXIT.
@@ -181,7 +181,7 @@
                 EXIT.
 
 
-            READ CADVEN INVALID KEY
+            READ ARQ-VENDEDOR INVALID KEY
                DISPLAY (24 10) "VENDEDOR INEXISTENTE"
                STOP RUN.
                
@@ -242,7 +242,7 @@
                 EXIT.
 
 
-            READ CADVEN INVALID KEY
+            READ ARQ-VENDEDOR INVALID KEY
                DISPLAY (24 10) "VENDEDOR INEXISTENTE"
                STOP RUN.
                
@@ -289,7 +289,7 @@
                 EXIT.
 
 
-            READ CADVEN INVALID KEY
+            READ ARQ-VENDEDOR INVALID KEY
                DISPLAY (24 10) "VENDEDOR INEXISTENTE"
                STOP RUN.
                
