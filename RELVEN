@@ -7,15 +7,15 @@
         INPUT-OUTPUT SECTION.
         FILE-CONTROL.
         
-        SELECT ARQ-VENDEDOR ASSIGN TO DISK DISK-VENDEDOR
+        SELECT ARQ-VENDEDOR ASSIGN TO DISK wid-arq-vendedor
              ORGANIZATION          IS INDEXEC 
              ACCESS MODE           IS DYNAMIC
              RECORD KEY            IS CHAVE01 = VEN-COD
              ALTERNATE KEY         IS CHAVE02 = VEN-CPF WITH NO DUPLICATES
-             ALTERNATE KEY         IS CHAVE03 = VEN-NOME  
+             ALTERNATE KEY         IS CHAVE03 = VEN-NOME WITH NO DUPLICATES
              LOCK MODE             IS MANUAL
-             FILE STATUS           IS WS-FILEST.
- 
+             FILE STATUS           IS ws-resultado-acesso.
+
   
         DATA DIVISION.
 
@@ -29,15 +29,15 @@
 
 
        WORKING-STORAGE SECTION.
-       77   WS-FILEST       PIC X(02) VALUE SPACES. 
-       77   WS-OPCAO        PIC 9(02) VALUE ZEROS. 
-       77   WS-OPCAO-OK     PIC X(02) VALUE SPACES.
-       77   WS-CHE-CPF      PIC X(02) VALUE SPACES.  
-       77   WS-ORD          PIC X(01) VALUE SPACES.
-       77   WS-CLA          PIC X(01) VALUE SPACES.
-       77   WS-VEN-COD      PIC 9(07) VALUE ZEROS.  
-       77   WS-VEN-NOME     PIC X(40) VALUE SPACES.
-       77   WS-EOF          PIC X(01) VALUE SPACES.
+       77   ws-resultado-acesso  PIC X(02) VALUE SPACES. 
+       77   WS-OPCAO             PIC 9(02) VALUE ZEROS. 
+       77   WS-OPCAO-OK          PIC X(02) VALUE SPACES.
+       77   WS-CHE-CPF           PIC X(02) VALUE SPACES.  
+       77   WS-ORD               PIC X(01) VALUE SPACES.
+       77   WS-CLA               PIC X(01) VALUE SPACES.
+       77   WS-VEN-COD           PIC 9(07) VALUE ZEROS.  
+       77   WS-VEN-NOME          PIC X(40) VALUE SPACES.
+       77   WS-EOF               PIC X(01) VALUE SPACES.
 
        01   DETALHE.
             05 FILLER       PIC X(03) VALUE SPACES.
