@@ -31,8 +31,12 @@
        WORKING-STORAGE SECTION.
        77   ws-resultado-acesso  PIC X(02) VALUE SPACES.
        77   WS-OPCAO             PIC 9(02) VALUE ZEROS. 
-       77   WS-OPCAO-OK          PIC X(01) VALUE SPACES.
-
+       77   WS-INCCLI            PIC X(01) VALUE SPACES.
+       77   WS-ALTCLI            PIC X(01) VALUE SPACES.
+       77   WS-EXCCLI            PIC X(01) VALUE SPACES.
+       77   WS-CONCLI            PIC X(01) VALUE SPACES.
+       77   WS-CHE-CNPJ          PIC X(010 VALUE SPACES.
+       
        LINKAGE SECTION.
 
        01   USING-PROG.
@@ -128,19 +132,19 @@
             EXIT.
 
 
-         0402-COMPLETA-INCVEN.
+         0402-COMPLETA-INCCLI.
 
-             ACCEPT (08 34) VEN-CPF WITH PROMPT.
+             ACCEPT (08 34) CLI-CNPJ WITH PROMPT.
 
-             PERFORM 0403-CHE-CPF THRU 0403-EXIT.
+             PERFORM 0403-CHE-CNPJ THRU 0403-EXIT.
 
-             IF  WS-CHE-CPF NOT = "OK"
-                 MOVE SPACES TO WS-INCVEN.
+             IF  WS-CHE-CNPJ NOT = "OK"
+                 MOVE SPACES TO WS-INCCLI.
 
-             ACCEPT (08 34) VEN-NOME WITH PROMPT.
-             ACCEPT (08 34) VEN-LAT  WITH PROMPT.
-             ACCEPT (08 34) VEN-LON  WITH PROMPT.
-
+             ACCEPT (08 34) CLI-NOME WITH PROMPT.
+             ACCEPT (08 34) CLI-LAT  WITH PROMPT.
+             ACCEPT (08 34) CLI-LON  WITH PROMPT.
+ 
              
          0402-EXIT.
              EXIT.
@@ -178,7 +182,7 @@
                 EXIT.
 
 
-            READ CADVEN INVALID KEY
+            READ ARQ-CLIENTE INVALID KEY
                DISPLAY (24 10) "VENDEDOR INEXISTENTE"
                STOP RUN.
                
@@ -239,7 +243,7 @@
                 EXIT.
 
 
-            READ CADVEN INVALID KEY
+            READ ARQ-CLIENTE INVALID KEY
                DISPLAY (24 10) "VENDEDOR INEXISTENTE"
                STOP RUN.
                
@@ -286,7 +290,7 @@
                 EXIT.
 
 
-            READ CADVEN INVALID KEY
+            READ ARQ-CLENTE INVALID KEY
                DISPLAY (24 10) "VENDEDOR INEXISTENTE"
                STOP RUN.
                
