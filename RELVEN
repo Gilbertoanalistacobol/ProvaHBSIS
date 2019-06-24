@@ -1,0 +1,257 @@
+        IDENTIFICATION DIVISION.
+        PROGRAM-ID.RELVEN.
+        ENVIRONMENT DIVISION.
+        CONFIGURATION SECTION.
+        SPECIAL-NAMES.
+              DECIMAL-POINT IS COMMA.
+        INPUT-OUTPUT SECTION.
+        FILE-CONTROL.
+        
+        SELECT ARQ-VENDEDOR ASSIGN TO DISK DISK-VENDEDOR
+             ORGANIZATION          IS INDEXEC 
+             ACCESS MODE           IS DYNAMIC
+             RECORD KEY            IS CHAVE01 = VEN-COD
+             ALTERNATE KEY         IS CHAVE02 = VEN-CPF WITH NO DUPLICATES
+             ALTERNATE KEY         IS CHAVE03 = VEN-NOME  
+             LOCK MODE             IS MANUAL
+             FILE STATUS           IS WS-FILEST.
+ 
+  
+        DATA DIVISION.
+
+        FD   ARQ-VENDEDOR.
+        01   REG-VENDEDOR.
+             05 VEN-COD                PIC  9(007).
+             05 VEN-CPF                PIC  9(011).
+             05 VEN-NOME               PIC  X(040).
+             05 VEN-LAT                PIC S9(003)V9(008).
+             05 VEN-LON                PIC S9(003)V9(008).
+
+
+       WORKING-STORAGE SECTION.
+       77   WS-FILEST       PIC X(02) VALUE SPACES. 
+       77   WS-OPCAO        PIC 9(02) VALUE ZEROS. 
+       77   WS-OPCAO-OK     PIC X(02) VALUE SPACES.
+       77   WS-CHE-CPF      PIC X(02) VALUE SPACES.  
+       77   WS-ORD          PIC X(01) VALUE SPACES.
+       77   WS-CLA          PIC X(01) VALUE SPACES.
+       77   WS-VEN-COD      PIC 9(07) VALUE ZEROS.  
+       77   WS-VEN-NOME     PIC X(40) VALUE SPACES.
+       77   WS-EOF          PIC X(01) VALUE SPACES.
+
+       01   DETALHE.
+            05 FILLER       PIC X(03) VALUE SPACES.
+            05 LIN-COD      PIC Z.ZZZ.999 BLANK WHEN ZEROS.
+            05 FILLER       PIC X(03) VALUE SPACES. 
+            05 LIN-CPF      PIC ZZZ.ZZZ.ZZZ-ZZ.
+            05 FILLER       PIC X(03) VALUE SPACES. 
+            05 LIN-NOME     PIC X(40) VALUE SPACES.
+            05 FILLER       PIC X(03) VALUE SPACES.
+            05 LIN-LAT      PIC S999,99999999 BLANK WHEN ZEROS.
+            05 FILLER       PIC X(03) VALUE SPACES.
+            05 LIN-LON      PIC S999,99999999 BLANK WHEN ZEROS.
+            
+       01   CAB1.
+            05 FILLER       PIC X(20) VALUE "EMPRESA EXEMPLO     ".
+            05 TIPO         PIC X(30).
+            05 FILLER       PIC X(70) VALUE SPACES. 
+            05 FILLER       PIC X(05) VALUE "PAG: ".
+            05 PAG          PIC Z99 VALUE ZEROS.
+        
+       01   CAB2.
+            05 FILLER       PIC X(132) VALUE ALL "-".
+
+       01   CAB3.
+            05 FILLER       PIC X(132) VALUE "COD.VENDEDOR   CPF          NOME                 
+       -    "LATITUDE          LONGITUDE".
+
+       LINKAGE SECTION.
+
+       01   USING-PROG.
+            05  USI-PRG     PIC X(10).
+
+
+       SCREEN SECTION.
+
+       01   TELA0202.
+            05 BLANK SCREEN.
+            05 LINE 01 COLUMN 70 VALUE "TELA02.02".
+            05 LINE 05 COLUMN 10 VALUE "RELATORIO DE VENDEDORES".
+            05 LINE 07 COLUMN 10 VALUE "ORDENACAO C-CRESCENTE OU D-DECRESCENTE.......( )".
+            05 LINE 08 COLUMN 10 VALUE "CLASSIF C-CLIENTE R-RAZAO SOCIAL ............( )".
+            05 LINE 09 COLUMN 10 VALUE "VENDEDOR INICIAL.............................(     )".
+            05 LINE 10 COLUMN 10 VALUE "NOME......(                                        )".
+            05 LINE 24 COLUMN 01 VALUE "MENSAGEM:".
+ 
+ 
+
+       PROCEDURE DIVISION USING USING-PROG.
+       0000-INICIO.
+ 
+           DISPLAY TELA0202.
+
+           ACCEPT (07 56) WS-ORD.
+           ACCEPT (08 56) WS-CLA.
+           ACCEPT (09 56) WS-VEN-COD WITH PROMPT.
+           ACCEPT (10 28) WS-VEN-NOME WITH PROMPT.
+
+
+
+           IF  WS-ORD = "C" AND WS-CLA = "C"
+               PERFORM 0100-IMPCC THRU 0100-EXIT
+                   UNTIL WS-EOF = "S".
+
+               PERFORM 1000-FIM.
+
+           IF  WS-ORD = "C" AND WS-CLA = "R"
+               PERFORM 0200-IMPCR THRU 0200-EXIT
+                   UNTIL WS-EOF = "S".
+
+               PERFORM 1000-FIM.
+
+
+           IF  WS-ORD = "D" AND WS-CLA = "C"
+               PERFORM 0300-IMPDC THRU 0300-EXIT
+                   UNTIL WS-EOF = "S".
+
+               PERFORM 1000-FIM.
+
+           IF  WS-ORD = "D" AND WS-CLA = "R"
+               PERFORM 0400-IMPDR THRU 0400-EXIT
+                   UNTIL WS-EOF = "S".
+
+               PERFORM 1000-FIM.
+
+       0100-IMPCC.
+
+           MOVE "VENDEDORES CRESCENTE" TO TIPO. 
+
+           IF  WS-VEN-COD NOT = ZEROS
+               START ARQ-VENDEDOR KEY IS NOT LESS WS-VEN-COD. 
+           
+           READ CAD-VENDEDOR INVALID KEY MOVE "S" TO WS-EOF.
+
+           IF  WS-EOF = "S"
+               EXIT.
+
+           ADD 1 TO WS-LIN.
+
+           IF WS-LIN GREATER 50
+              PERFORM 0900-CABECALHO THRU 0900-EXIT.
+
+ 
+           MOVE VEN-COD     TO LIN-COD.
+           MOVE VEN-CPF     TO LIN-CNPJ.
+           MOVE VEN-NOME    TO LIN-NOME.
+           MOVE VEN-LAT     TO LIN-LAT.
+           MOVE VEN-LON     TO LIN-LON.
+         
+           WRITE DETALHE BEFORE 1.
+
+       0100-EXIT.
+           EXIT.
+
+       0200-IMPCR.
+
+           MOVE "VENDEDORES CRESCENTE" TO TIPO.
+
+           IF  WS-VEN-NOME NOT = SPACES
+               START ARQ-VENDEDOR KEY IS NOT LESS WS-CLI-NOME. 
+           
+           READ CAD-VENDEDOR INVALID KEY MOVE "S" TO WS-EOF.
+
+           IF  WS-EOF = "S"
+               EXIT.
+
+           ADD 1 TO WS-LIN.
+
+           IF WS-LIN GREATER 50
+              PERFORM 0900-CABECALHO THRU 0900-EXIT.
+
+ 
+           MOVE VEN-COD     TO LIN-COD.
+           MOVE VEN-CPF     TO LIN-CNPJ.
+           MOVE VEN-NOME    TO LIN-NOME.
+           MOVE VEN-LAT     TO LIN-LAT.
+           MOVE VEN-LON     TO LIN-LON.
+         
+           WRITE DETALHE BEFORE 1.
+
+       0200-EXIT.
+           EXIT. 
+
+       0300-IMPDC.
+
+           MOVE "VENDEDORES DECRESCENTE" TO TIPO.
+
+           IF  WS-CLI-COD NOT = ZEROS
+               START ARQ-VENDEDOR KEY IS NOT LESS WS-CLI-COD. 
+           
+           READ CAD-VENDEDOR INVALID KEY MOVE "S" TO WS-EOF.
+
+           IF  WS-EOF = "S"
+               EXIT.
+
+           ADD 1 TO WS-LIN.
+
+           IF WS-LIN GREATER 50
+              PERFORM 0900-CABECALHO THRU 0900-EXIT.
+
+ 
+           MOVE VEN-COD     TO LIN-COD.
+           MOVE VEN-CPF     TO LIN-CNPJ.
+           MOVE VEN-NOME    TO LIN-NOME.
+           MOVE VEN-LAT     TO LIN-LAT.
+           MOVE VEN-LON     TO LIN-LON.
+         
+           WRITE DETALHE BEFORE 1.
+
+       0300-EXIT.
+           EXIT. 
+
+       0400-IMPDR.
+
+           MOVE "VENDEDORES DECRESCENTE" TO TIPO.
+
+           IF  WS-VEN-NOME NOT = SPACES
+               START ARQ-VENDEDOR KEY IS NOT LESS WS-VEN-NOME. 
+           
+           READ CAD-VENDEDOR INVALID KEY MOVE "S" TO WS-EOF.
+
+           IF  WS-EOF = "S"
+               EXIT.
+
+           ADD 1 TO WS-LIN.
+
+           IF WS-LIN GREATER 50
+              PERFORM 0900-CABECALHO THRU 0900-EXIT.
+
+ 
+           MOVE VEN-COD     TO LIN-COD.
+           MOVE VEN-CPF     TO LIN-CNPJ.
+           MOVE VEN-NOME    TO LIN-NOME.
+           MOVE VEN-LAT     TO LIN-LAT.
+           MOVE VEN-LON     TO LIN-LON.
+         
+           WRITE DETALHE BEFORE 1.
+
+       0400-EXIT.
+           EXIT. 
+
+
+       0900-CABECALHO.
+
+           ADD 1 TO WS-PAG.
+           MOVE WS-PAG TO CAB1-PAG.
+
+           WRITE CAB2 BEFORE PAGE.
+           WRITE CAB1 BEFORE 1.
+           WRITE CAB2 BEFORE 1.
+           WRITE CAB3 BEFORE 1.
+           WRITE CAB2 BEFORE 1.
+
+        0900-EXIT.
+            EXIT.
+
+        1000-FIM.
+             STOP RUN.
