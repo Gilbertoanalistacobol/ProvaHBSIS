@@ -29,15 +29,15 @@
 
 
        WORKING-STORAGE SECTION.
-       77   WS-FILEST       PIC X(02) VALUE SPACES. 
-       77   WS-OPCAO        PIC 9(02) VALUE ZEROS. 
-       77   WS-OPCAO-OK     PIC X(02) VALUE SPACES.
-       77   WS-ORD          PIC X(01) VALUE SPACES.
-       77   WS-CLA          PIC X(01) VALUE SPACES.
-       77   WS-CLI-COD      PIC 9(07) VALUE ZEROS.  
-       77   WS-CLI-NOME     PIC X(40) VALUE SPACES.
-       77   WS-VEN-COD      PIC 9(07) VALUE ZEROS.
-       77   WS-EOF          PIC X(01) VALUE SPACES.
+       77   ws-resultado-acesso  PIC X(02) VALUE SPACES. 
+       77   WS-OPCAO             PIC 9(02) VALUE ZEROS. 
+       77   WS-OPCAO-OK          PIC X(02) VALUE SPACES.
+       77   WS-ORD               PIC X(01) VALUE SPACES.
+       77   WS-CLA               PIC X(01) VALUE SPACES.
+       77   WS-CLI-COD           PIC 9(07) VALUE ZEROS.  
+       77   WS-CLI-NOME          PIC X(40) VALUE SPACES.
+       77   WS-VEN-COD           PIC 9(07) VALUE ZEROS.
+       77   WS-EOF               PIC X(01) VALUE SPACES.
 
        01   DETALHE.
             05 FILLER       PIC X(03) VALUE SPACES.
