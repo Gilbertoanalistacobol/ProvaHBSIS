@@ -75,16 +75,62 @@
            PERFORM 0300-ACEITAR-OPCAO-VE THRU 0300-EXIT
                  UNTIL WS-OPCAO-OK = "S".
 
-           IF  WS-OPCAO = 1
-               PERFORM 0400-INC-VENDEDOR THRU 0400-EXIT.  
- 
-           .
-           .
-           .
-           .
-           .
+            IF  WS-OPCAO = 01           
+               ACCEPT (10 30) VEN-COD
+               PERFORM INC-VEN THRU FIM-INC-VEN
+               STOP RUN.
+           
+           IF  WS-OPCAO = 02           
+               ACCEPT (10 30) VEN-COD
+               PERFORM ALT-VEN THRU FIM-ALT-VEN
+               STOP RUN.
+               
+           IF  WS-OPCAO = 03           
+               ACCEPT (10 30) VEN-COD
+               PERFORM EXC-VEN THRU FIM-EXC-VEN
+               STOP RUN.
+               
+       INC-VEN.
+        
+           READ ARQ-VENDEDOR INVALID KEY
+           ACCEPT (11 30) VEN-CPF  
+           ACCEPT (12 30) VEN-NOME 
+           ACCEPT (13 30) VEN-LAT
+           ACCEPT (14 30) VEN-LON
+           DISPLAY (24 10) "VENDEDOR INCLUIDO".
+           
+           WRITE REG-VENDEDOR.
 
+      FIM-INC-VEN.
+           EXIT.
+           
+       ALT-VEN.
+        
+           READ ARQ-VENDEDOR INVALID KEY
+                DISPLAY (24 10) "VENDEDOR INEXISTENTE"
+                STOP RUN.
+                
+           ACCEPT (11 30) CLI-CPF    WITH UPDATE. 
+           ACCEPT (12 30) CLI-NOME   WITH UPDATE.
+           ACCEPT (13 30) CLI-LAT    WITH UPDATE.
+           ACCEPT (14 30) CLI-LON    WITH UPDATE.
+           
+           REWRITE REG-VENDEDOR.
 
+       FIM-ALT-ENV.
+           EXIT.
+           
+       EXC-VEN.
+        
+           READ ARQ-VENDEDOR INVALID KEY
+                DISPLAY (24 10) "VENDEDORINEXISTENTE"
+                STOP RUN.
+                
+           DELETE REG-VENDEDOR.
+                      
+       FIM-ALT-VEN.
+           EXIT.
+           
        0300-ACEITAR-OPCAO-CL.
 
             DISPLAY TELA0102INC. 
