@@ -259,5 +259,7 @@
             EXIT.
 
         1000-FIM.
-             STOP RUN.
-
+           MOVE "MENU" TO PAR-PRG
+           CALL "MENU" USING PARAM-PROG.
+           
+           
