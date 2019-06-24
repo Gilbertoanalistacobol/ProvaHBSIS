@@ -35,7 +35,7 @@
        77   WS-ALTCLI            PIC X(01) VALUE SPACES.
        77   WS-EXCCLI            PIC X(01) VALUE SPACES.
        77   WS-CONCLI            PIC X(01) VALUE SPACES.
-       77   WS-CHE-CNPJ          PIC X(010 VALUE SPACES.
+       77   WS-CHE-CNPJ          PIC X(02) VALUE SPACES.
        
        LINKAGE SECTION.
 
@@ -154,69 +154,69 @@
         *     CHECAR DIGITO VERIFICADOR MODULO 11.
 
               IF ROTINA = "OK"
-                 MOVE "OK" TO WS-CHE-CPF
+                 MOVE "OK" TO WS-CHE-CNPJ
               ELSE
-                 MOVE SPACES TO WS-CHE-CPF.
+                 MOVE SPACES TO WS-CHE-CNPJ.
 
           0403-EXIT.
               EXIT.
 
 
-        0500-ALT-VENDEDOR.
+        0500-ALT-CLIENTE.
 
-        MOVE SPACES TO WS-ALTVEN.
+        MOVE SPACES TO WS-ALTCLI.
  
-        PERFORM 0501-ALT-CODVEN THRU 0501-EXIT
-            UNTIL WS-ALTVEN = "OK".
+        PERFORM 0501-ALT-CODCLI THRU 0501-EXIT
+            UNTIL WS-ALTCLI = "OK".
 
         0500-EXIT.
              EXIT.
 
-        0501-ALT-CODVEN.
+        0501-ALT-CODCLI.
  
-            ACCEPT (07 34) VEN-COD WITH PROMPT.
+            ACCEPT (07 34) CLI-COD WITH PROMPT.
             
-            IF  VEN-COD = ZEROS
-                DISPLAY (24 10) "CODIGO DO VENDEDOR NAO INFORMADO"
-                MOVE SPACES TO WS-ALTVEN
+            IF  CLI-COD = ZEROS
+                DISPLAY (24 10) "CODIGO DO CLIENTE NAO INFORMADO"
+                MOVE SPACES TO WS-ALTCLI
                 EXIT.
 
 
             READ ARQ-CLIENTE INVALID KEY
-               DISPLAY (24 10) "VENDEDOR INEXISTENTE"
+               DISPLAY (24 10) "CLIENTE INEXISTENTE"
                STOP RUN.
                
-               PERFORM 0502-COMPLETA-INCVEN THRU 0502-EXIT.
+               PERFORM 0502-COMPLETA-INCCLI THRU 0502-EXIT.
 
          0501-EXIT.
             EXIT.
 
 
-         0502-COMPLETA-INCVEN.
+         0502-COMPLETA-INCCLI.
 
-             ACCEPT (08 34) VEN-CPF WITH PROMPT.
+             ACCEPT (08 34) CLI-CNPJWITH PROMPT.
 
-             PERFORM 0403-CHE-CPF THRU 0403-EXIT.
+             PERFORM 0403-CHE-CNPJ THRU 0403-EXIT.
 
-             IF  WS-CHE-CPF NOT = "OK"
-                 MOVE SPACES TO WS-ALTVEN.
+             IF  WS-CHE-CNPJ NOT = "OK"
+                 MOVE SPACES TO WS-ALTCLI.
 
-             ACCEPT (08 34) VEN-NOME WITH UPDATE.
-             ACCEPT (08 34) VEN-LAT  WITH UPDATE.
-             ACCEPT (08 34) VEN-LON  WITH UPDATE.
+             ACCEPT (08 34) CLI-NOME WITH UPDATE.
+             ACCEPT (08 34) CLI-LAT  WITH UPDATE.
+             ACCEPT (08 34) CLI-LON  WITH UPDATE.
 
              
          0502-EXIT.
              EXIT.
 
-         0503-CHE-CPF.
+         0503-CHE-CNPJ.
 
         *     CHECAR DIGITO VERIFICADOR MODULO 11.
 
               IF ROTINA = "OK"
-                 MOVE "OK" TO WS-CHE-CPF
+                 MOVE "OK" TO WS-CHE-CNPJ
               ELSE
-                 MOVE SPACES TO WS-CHE-CPF.
+                 MOVE SPACES TO WS-CHE-CNPJ.
 
           0503-EXIT.
               EXIT.
