@@ -1,0 +1,82 @@
+        IDENTIFICATION DIVISION.
+        PROGRAM-ID.CADCLI.
+        ENVIRONMENT DIVISION.
+        CONFIGURATION SECTION.
+        SPECIAL-NAMES.
+              DECIMAL-POINT IS COMMA.
+        INPUT-OUTPUT SECTION.
+        FILE-CONTROL.
+        
+        SELECT ARQ-CLIENTE ASSIGN TO DISK DISK-VENDEDOR
+             ORGANIZATION          IS INDEXEC 
+             ACCESS MODE           IS DYNAMIC
+             RECORD KEY            IS CHAVE01 = CLI-COD
+             ALTERNATE KEY         IS CHAVE02 = CLI-CPF WITH NO DUPLICATES
+             ALTERNATE KEY         IS CHAVE03 = CLI-NOME WITH NO DUPLICATES
+             LOCK MODE             IS MANUAL
+             FILE STATUS           IS WS-FILEST.
+ 
+
+        DATA DIVISION.
+
+        FD   ARQ-CLIENTE.
+        01   REG-CLIENTE.
+             05 CLI-COD                PIC  9(007).
+             05 CLI-CNPJ               PIC  9(014).
+             05 CLI-RAZAO              PIC  X(040).
+             05 CLI-LAT                PIC S9(003)V9(008).
+             05 CLI-LON                PIC S9(003)V9(008).
+
+
+       WORKING-STORAGE SECTION.
+       77   WS-OPCAO        PIC 9(02) VALUE ZEROS. 
+       77   WS-OPCAO-OK     PIC X(01) VALUE SPACES.
+
+       LINKAGE SECTION.
+
+       01   USING-PROG.
+            05  USI-PRG     PIC X(10).
+
+       SCREEN SECTION.
+
+       01   TELA0101.
+            05 BLANK SCREEN.
+            05 LINE 01 COLUMN 70 VALUE "TELA01.01".
+            05 LINE 05 COLUMN 10 VALUE "CADASTRO DE CLIENTES".
+            05 LINE 07 COLUMN 10 VALUE "INCLUSAO ...................................(01)".
+            05 LINE 08 COLUMN 10 VALUE "ALTERACAO ..................................(02)".
+            05 LINE 09 COLUMN 10 VALUE "EXCLUSAO ...................................(03)".
+            05 LINE 11 COLUMN 10 VALUE "IMPORTACAO .................................(04)".
+            05 LINE 17 COLUMN 10 VALUE "OPCAO:......................................(  )".
+            05 LINE 24 COLUMN 01 VALUE "MENSAGEM:".
+
+
+       PROCEDURE DIVISION USING USING-PROG.
+       0000-INICIO.
+ 
+           DISPLAY TELA0101.
+
+           MOVE SPACES TO WS-OPCAO-OK.
+
+           PERFORM 0200-ACEITAR-OPCAO-CL THRU 0200-EXIT
+                 UNTIL WS-OPCAO-OK = "S".
+           .
+           .
+           .
+           .
+           .
+
+
+       0200-ACEITAR-OPCAO-CL.
+
+            ACCEPT (17 55)WS-OPCAO WITH PROMPT.
+
+            IF WS-OPCAO NOT = 01 AND NOT = 02 AND NOT = 03 AND NOT = 04
+               DISPLAY (24 10) "OPCAO INVALIDA
+               MOVE SPACES TO WS-OPCAO-OK
+               EXIT.
+
+            MOVE "S" TO WS-OPCAO-OK.
+          
+        0200-EXIT.
+            EXIT.
