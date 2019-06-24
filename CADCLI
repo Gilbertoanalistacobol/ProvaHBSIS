@@ -71,61 +71,6 @@
            PERFORM 0200-ACEITAR-OPCAO-CL THRU 0200-EXIT
                  UNTIL WS-OPCAO-OK = "S".
            
-           IF  WS-OPCAO = 01           
-               ACCEPT (10 30) CLI-COD
-               PERFORM INC-CLI THRU FIM-INC-CLI
-               STOP RUN.
-           
-           IF  WS-OPCAO = 02           
-               ACCEPT (10 30) CLI-COD
-               PERFORM ALT-CLI THRU FIM-ALT-CLI
-               STOP RUN.
-               
-           IF  WS-OPCAO = 03           
-               ACCEPT (10 30) CLI-COD
-               PERFORM EXC-CLI THRU FIM-EXC-CLI
-               STOP RUN.
-               
-       INC-CLI.
-        
-           READ ARQ-CLIENTE INVALID KEY
-           ACCEPT (11 30) CLI-CNPJ 
-           ACCEPT (12 30) CLI-RAZAO
-           ACCEPT (13 30) CLI-LAT
-           ACCEPT (14 30) CLI-LON
-           DISPLAY (24 10) "CLIENTE INCLUIDO".
-           
-           WRITE REG-CLIENTE.
-
-      FIM-INC-CLI.
-           EXIT.
-           
-       ALT-CLI.
-        
-           READ ARQ-CLIENTE INVALID KEY
-                DISPLAY (24 10) "CLIENTE INEXISTENTE"
-                STOP RUN.
-                
-           ACCEPT (11 30) CLI-CNPJ   WITH UPDATE. 
-           ACCEPT (12 30) CLI-RAZAO  WITH UPDATE.
-           ACCEPT (13 30) CLI-LAT    WITH UPDATE.
-           ACCEPT (14 30) CLI-LON    WITH UPDATE.
-           
-           REWRITE REG-CLIENTE.
-
-       FIM-ALT-CLI.
-           EXIT.
-           
-       EXC-CLI.
-        
-           READ ARQ-CLIENTE INVALID KEY
-                DISPLAY (24 10) "CLIENTE INEXISTENTE"
-                STOP RUN.
-                
-           DELETE REG-CLI.
-                      
-       FIM-ALT-CLI.
-           EXIT.
            
        0200-ACEITAR-OPCAO-CL.
 
@@ -140,3 +85,212 @@
           
         0200-EXIT.
             EXIT.
+
+
+        0400-INC-VENDEDOR.
+
+        MOVE SPACES TO WS-INCVEN.
+ 
+        PERFORM 0401-INC-CODVEN THRU 0401-EXIT
+            UNTIL WS-INCVEN = "OK".
+
+        0400-EXIT.
+             EXIT.
+
+        0401-INC-CODVEN.
+ 
+            ACCEPT (07 34) VEN-COD WITH PROMPT.
+            
+            IF  VEN-COD = ZEROS
+                DISPLAY (24 10) "CODIGO DO VENDEDOR NAO INFORMADO"
+                MOVE SPACES TO WS-INCVEN
+                EXIT.
+
+
+            READ CADVEN INVALID KEY
+                 PERFORM 0402-COMPLETA-INCVEN THRU 0402-EXIT.
+
+         0401-EXIT.
+            EXIT.
+
+
+         0402-COMPLETA-INCVEN.
+
+             ACCEPT (08 34) VEN-CPF WITH PROMPT.
+
+             PERFORM 0403-CHE-CPF THRU 0403-EXIT.
+
+             IF  WS-CHE-CPF NOT = "OK"
+                 MOVE SPACES TO WS-INCVEN.
+
+             ACCEPT (08 34) VEN-NOME WITH PROMPT.
+             ACCEPT (08 34) VEN-LAT  WITH PROMPT.
+             ACCEPT (08 34) VEN-LON  WITH PROMPT.
+
+             
+         0402-EXIT.
+             EXIT.
+
+         0403-CHE-CPF.
+
+        *     CHECAR DIGITO VERIFICADOR MODULO 11.
+
+              IF ROTINA = "OK"
+                 MOVE "OK" TO WS-CHE-CPF
+              ELSE
+                 MOVE SPACES TO WS-CHE-CPF.
+
+          0403-EXIT.
+              EXIT.
+
+
+        0500-ALT-VENDEDOR.
+
+        MOVE SPACES TO WS-ALTVEN.
+ 
+        PERFORM 0501-ALT-CODVEN THRU 0501-EXIT
+            UNTIL WS-ALTVEN = "OK".
+
+        0500-EXIT.
+             EXIT.
+
+        0501-ALT-CODVEN.
+ 
+            ACCEPT (07 34) VEN-COD WITH PROMPT.
+            
+            IF  VEN-COD = ZEROS
+                DISPLAY (24 10) "CODIGO DO VENDEDOR NAO INFORMADO"
+                MOVE SPACES TO WS-ALTVEN
+                EXIT.
+
+
+            READ CADVEN INVALID KEY
+               DISPLAY (24 10) "VENDEDOR INEXISTENTE"
+               STOP RUN.
+               
+               PERFORM 0502-COMPLETA-INCVEN THRU 0502-EXIT.
+
+         0501-EXIT.
+            EXIT.
+
+
+         0502-COMPLETA-INCVEN.
+
+             ACCEPT (08 34) VEN-CPF WITH PROMPT.
+
+             PERFORM 0403-CHE-CPF THRU 0403-EXIT.
+
+             IF  WS-CHE-CPF NOT = "OK"
+                 MOVE SPACES TO WS-ALTVEN.
+
+             ACCEPT (08 34) VEN-NOME WITH UPDATE.
+             ACCEPT (08 34) VEN-LAT  WITH UPDATE.
+             ACCEPT (08 34) VEN-LON  WITH UPDATE.
+
+             
+         0502-EXIT.
+             EXIT.
+
+         0503-CHE-CPF.
+
+        *     CHECAR DIGITO VERIFICADOR MODULO 11.
+
+              IF ROTINA = "OK"
+                 MOVE "OK" TO WS-CHE-CPF
+              ELSE
+                 MOVE SPACES TO WS-CHE-CPF.
+
+          0503-EXIT.
+              EXIT.
+
+
+       0600-EXC-VENDEDOR.
+          
+          
+           MOVE SPACES TO WS-EXCVEN.
+ 
+           PERFORM 0601-EXC-CODVEN THRU 0601-EXIT
+             UNTIL WS-EXCVEN = "OK".
+
+        0600-EXIT.
+              EXIT.
+
+        0601-EXC-CODVEN.
+ 
+            ACCEPT (07 34) VEN-COD WITH PROMPT.
+            
+            IF  VEN-COD = ZEROS
+                DISPLAY (24 10) "CODIGO DO VENDEDOR NAO INFORMADO"
+                MOVE SPACES TO WS-ALTVEN
+                EXIT.
+
+
+            READ CADVEN INVALID KEY
+               DISPLAY (24 10) "VENDEDOR INEXISTENTE"
+               STOP RUN.
+               
+               PERFORM 0602-COMPLETA-EXCVEN THRU 0602-EXIT.
+
+         0601-EXIT.
+            EXIT.
+
+
+         0602-COMPLETA-ALTVEN.
+
+             DISPLAY (08 34) VEN-NOME.
+             DISPLAY (08 34) VEN-LAT.
+             DISPLAY (08 34) VEN-LON.
+             DISPLAY (24 10) 'CONFIRMA? S/N:"
+             
+             ACCEPT (24 24) WS-CONF. 
+          
+             IF  WS-CONF = "S"
+                 DELETE REG-VENDEDOR.
+                 
+         0602-EXIT.
+               EXIT.
+               
+               
+       0700-EXC-VENDEDOR.
+          
+          
+           MOVE SPACES TO WS-CONVEN.
+ 
+           PERFORM 0701-CON-CODVEN THRU 0701-EXIT
+             UNTIL WS-CONVEN = "OK".
+
+        0700-EXIT.
+              EXIT.
+
+        0701-EXC-CODVEN.
+ 
+            ACCEPT (07 34) VEN-COD WITH PROMPT.
+            
+            IF  VEN-COD = ZEROS
+                DISPLAY (24 10) "CODIGO DO VENDEDOR NAO INFORMADO"
+                MOVE SPACES TO WS-EXCVEN
+                EXIT.
+
+
+            READ CADVEN INVALID KEY
+               DISPLAY (24 10) "VENDEDOR INEXISTENTE"
+               STOP RUN.
+               
+               PERFORM 0702-COMPLETA-CONVEN THRU 0702-EXIT.
+
+         0701-EXIT.
+            EXIT.
+
+
+         0702-COMPLETA-CONVEN.
+
+             DISPLAY (08 34) VEN-NOME.
+             DISPLAY (08 34) VEN-LAT.
+             DISPLAY (08 34) VEN-LON.
+             DISPLAY (24 10) 'CONSULTA OK".
+             
+             ACCEPT (24 12) WS-CONF. 
+          
+         0702-EXIT.
+               EXIT.
+               
