@@ -39,6 +39,9 @@
        77   WS-VEN-NOME          PIC X(40) VALUE SPACES.
        77   WS-EOF               PIC X(01) VALUE SPACES.
 
+       01   PARAM-PROG.
+           05  PAR-PRG     PIC X(10).       
+
        01   DETALHE.
             05 FILLER       PIC X(03) VALUE SPACES.
             05 LIN-COD      PIC Z.ZZZ.999 BLANK WHEN ZEROS.
