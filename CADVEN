@@ -33,7 +33,13 @@
        77   WS-OPCAO            PIC 9(02) VALUE ZEROS. 
        77   WS-OPCAO-OK         PIC X(02) VALUE SPACES.
        77   WS-CHE-CPF          PIC X(02) VALUE SPACES.  
-
+       77   WS-INCVEN           PIC X(01) VALUE SPACES.
+       77   WS-ALTVEN           PIC X(01) VALUE SPACES.
+       77   WS-EXCVEN           PIC X(01) VALUE SPACES.
+       77   WS-CONVEN           PIC X(01) VALUE SPACES.
+       77   WS-CHE-CPF          PIC X(010 VALUE SPACES.
+       
+       
        LINKAGE SECTION.
 
        01   USING-PROG.
