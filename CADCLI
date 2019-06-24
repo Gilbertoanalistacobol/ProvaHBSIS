@@ -29,8 +29,9 @@
 
 
        WORKING-STORAGE SECTION.
-       77   WS-OPCAO        PIC 9(02) VALUE ZEROS. 
-       77   WS-OPCAO-OK     PIC X(01) VALUE SPACES.
+       77   ws-resultado-acesso  PIC X(02) VALUE SPACES.
+       77   WS-OPCAO             PIC 9(02) VALUE ZEROS. 
+       77   WS-OPCAO-OK          PIC X(01) VALUE SPACES.
 
        LINKAGE SECTION.
 
